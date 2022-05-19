@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  addressvalidationv1:
+    image: addressvalidationv1
+    build:
+      context: .
+      dockerfile: ./Dockerfile
