@@ -1,5 +1,38 @@
 #check for long consecutive sequence of consonants
 # character_sequence_monkey_type_flag=False
+#%%
+import pickle
+from gibberish_detector import trainer
+from gibberish_detector import detector
+
+def gibberish_text_detection(text):
+        trained_model=trainer.train('big.txt')  #can be changed to another text data source
+        print("trained_model type: ",type(trained_model))
+        print("storing trained model...")
+        #trained_model.to_pickle('trained_model_v1.pkl')
+        #dumping model to a pickle file
+        pickle.dump(trained_model, open('trained_model_for_gibberish_detection.pkl','wb'))
+        
+        #load model  - 
+        #model1 = pickle.load(open('trained_model_v1.pkl','rb'))
+        model2 = pickle.load(open('trained_model_for_gibberish_detection.pkl','rb'))
+        print("loaded model type...- ",type(model2))
+        #Detector = detector.create_from_model('big.model')
+        #print(Detector.is_gibberish('ertrjiloifdfyyoiu'))
+        #trained_model.to
+        #detecting gibberish text using model - 
+        
+        detecter_model=detector.create_from_model('trained_model_for_gibberish_detection.pkl')
+        print("Note - currently monkey typing detection is performed using a random novel - as training text corpus... - \nthis can be modified to more suitable location related data corpus...")
+        #text=input("enter text to be checked for monkey typing... ")
+        is_monkey_typed=detecter_model.is_gibberish(text)
+        print("is_monkey_typed: ",is_monkey_typed)
+        return is_monkey_typed
+#%%
+#testing function call...
+gibberish_text_detection("xzxxcxx")
+#True
+#%%
 class keyCoordinates():
     def __init__(self,key):
         self.key=key
@@ -270,6 +303,9 @@ def two_hand_monkey_typing(text):
     #now check for avg_msd, direction_change in left and right text separately -
     print("left text: ",left_text)
     print("right text: ",right_text)
+    left_text_monkey_typing=False
+    right_text_monkey_typing=False
+
     if left_text!="":
         left_text_monkey_typing=detect_one_hand_monkey_typing(left_text)
     if right_text!="":
